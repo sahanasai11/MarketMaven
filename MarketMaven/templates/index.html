@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block app_content %}
+
+<div id="index">
+    <div id="settings-card" class="card">
+        <form>
+            <div class="form-elements">
+                <div>
+                    <label for="starting-amount">Starting amount:</label><br>
+                    <input type="text" id="starting-amount" name="starting-amount">
+                </div>
+
+                <div>
+                    <label for="years-to-grow">Years to grow:</label><br>
+                    <input type="text" id="years-to-grow" name="years-to-grow">
+                </div>
+
+                <div class="slidecontainer">
+                    <label for="risk-tolerance">Risk tolerance:</label><br>
+                    <input type="range" min="1" max="100" value="50" class="slider" id="risk-tolerance">
+                </div>
+
+                <div id="sectors-div">
+                    <div>
+                        <label for="sectors">Sectors:</label><br>
+                        <input list="sectors"/>
+                        <datalist id="sectors">
+                            <option value="Energy"></option>
+                            <option value="Materials"></option>
+                            <option value="Indstrials"></option>
+                        </datalist>
+                    </div>
+                    <div class="selections">
+                        <p></p>
+                    </div>
+                </div>
+
+                <div id="exchanges-div">
+                    <div>
+                        <label for="exchanges">Exchanges:</label><br>
+                        <input list="exchanges"/>
+                        <datalist id="exchanges">
+                            <option value="NYSE"></option>
+                            <option value="NASDAQ"></option>
+                        </datalist>
+                    </div>
+                    <div class="selections">
+                        <p></p>
+
+                    </div>
+                </div>
+
+                <div id="stocks-div">
+                    <div>
+                        <label for="stocks">Stocks:</label><br>
+                        <input list="stocks"/>
+                        <datalist id="stocks">
+                            <option value="Apple"></option>
+                            <option value="Amazon"></option>
+                        </datalist>
+                    </div>
+                    <div class="selections">
+                        <p></p>
+
+                    </div>
+                </div>
+
+                <div>
+                    <label for="fractional-investing">Allow Fractional Shares</label>
+                    <input type="checkbox" id="fractional-investing">
+                </div>
+
+                <div>
+                    <label for="etfs">ETF Comparison:</label><br>
+                    <input list="etfs"/>
+                    <datalist id="etfs">
+                        <option value="S&P 500"></option>
+                        <option value="QQQ"></option>
+                    </datalist>
+                </div>
+
+                <div>
+                    <input type="submit" value="Submit" id="submit-settings-btn">
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div id="etf-graph" class="card graph">
+        <h2>ETF Network Graph</h2>
+    </div>
+
+    <div id="selection-graph" class="card graph">
+        <h2>Selected Strategy Network Graph</h2>
+    </div>
+
+</div>
+    
+
+        
+
+{% endblock %}
