@@ -87,23 +87,24 @@
         </form>
     </div>
 
-    <div id="etf-graph" class="card graph">
-        <h2>ETF Network Graph</h2>
+    <div id="etf-card" class="card graph">
+        <h1>ETF Network</h1>
     </div>
 
-    <div id="selection-graph" class="card graph">
-        <h2>Selected Strategy Network Graph</h2>
+    <div id="selection-card" class="card graph">
+        <h1>Selected Strategy Network</h1>
+        <div id="selection-graph">
+
+        </div>
     </div>
 
 </div>
-    
 
 <script src="//d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
 <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
 
 <script>
-    console.log("Hello, World!");
     d3.select("#selection-graph").graphviz().renderDot('digraph {a -> b}');
 </script>        
 
