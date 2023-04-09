@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import graphviz
 
 
 class Network():
@@ -21,5 +22,7 @@ class Network():
     
     def visualize_network(self, path):
         nx.drawing.nx_agraph.write_dot(self.network, path)
+        return graphviz.Source.from_file(path).source
+
 
 
