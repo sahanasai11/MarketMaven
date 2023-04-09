@@ -61,8 +61,19 @@
     margin-left: 20px;
     width: 500px;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.graph h2 {
-    color: #777
+.graph h1 {
+    color: #777;
+    margin-bottom: 10px;
+}
+
+
+svg {
+    width: 400px;
+    height: 400px;
+    background-color: #f8f8f8;
 }
