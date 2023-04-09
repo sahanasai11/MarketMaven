@@ -8,5 +8,5 @@ Setup:
 - To run application:
     - `cd MarketMaven`
     - `flask run`
-- To update dependencies: `pip freeze > requirements.txt`
+- To update dependencies (make sure you're not in MarketMaven directory): `pip freeze > requirements.txt`
 - If you need to change port: `export FLASK_RUN_PORT=8000`
