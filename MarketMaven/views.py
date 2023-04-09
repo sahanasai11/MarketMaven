@@ -7,6 +7,6 @@ from . import networks
 def index():
     curr_network = networks.Network("Basic", 5)
     path = "test.dot"
-    curr_network.visualize_network(path)
+    src = curr_network.visualize_network(path)
 
-    return render_template("index.html", network_path=path)
+    return render_template("index.html", network_source=src)
