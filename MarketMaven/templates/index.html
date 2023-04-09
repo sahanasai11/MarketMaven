@@ -35,21 +35,6 @@
                     </div>
                 </div>
 
-                <div id="exchanges-div">
-                    <div>
-                        <label for="exchanges">Exchanges:</label><br>
-                        <input list="exchanges"/>
-                        <datalist id="exchanges">
-                            <option value="NYSE"></option>
-                            <option value="NASDAQ"></option>
-                        </datalist>
-                    </div>
-                    <div class="selections">
-                        <p></p>
-
-                    </div>
-                </div>
-
                 <div id="stocks-div">
                     <div>
                         <label for="stocks">Stocks:</label><br>
@@ -70,13 +55,19 @@
                     <input type="checkbox" id="fractional-investing">
                 </div>
 
-                <div>
-                    <label for="etfs">ETF Comparison:</label><br>
-                    <input list="etfs"/>
-                    <datalist id="etfs">
-                        <option value="S&P 500"></option>
-                        <option value="QQQ"></option>
-                    </datalist>
+                <div id="exchanges-div">
+                    <div>
+                        <label for="exchanges">Exchange:</label><br>
+                        <input list="exchanges"/>
+                        <datalist id="exchanges">
+                            <option value="NYSE"></option>
+                            <option value="NASDAQ"></option>
+                        </datalist>
+                    </div>
+                    <div class="selections">
+                        <p></p>
+
+                    </div>
                 </div>
 
                 <div>
@@ -88,7 +79,10 @@
     </div>
 
     <div id="etf-card" class="card graph">
-        <h1>ETF Network</h1>
+        <h1>Exchange Network</h1>
+        <div id="etf-graph">
+
+        </div>
     </div>
 
     <div id="selection-card" class="card graph">
@@ -106,6 +100,8 @@
 
 <script>    
     d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
+    d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
+
 </script>        
 
 {% endblock %}
