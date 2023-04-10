@@ -7,7 +7,7 @@ Setup:
 - Install dependencies: `pip install -r requirements.txt`
 - To run application:
     - `cd MarketMaven`
-    - `FLASK_APP=webapp `
+    - `export FLASK_APP=webapp `
     - `flask run`
     
 - To update dependencies (make sure you're not in MarketMaven directory): `pip freeze > requirements.txt`
