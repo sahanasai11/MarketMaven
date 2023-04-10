@@ -3,12 +3,14 @@ from . import app
 from . import networks
 from . import data_loader
 
+global loader
+
+def set_data():
+    global loader
+    loader = data_loader.DataLoader('../all_stocks_5yr.csv')
 
 @app.route("/")
 def index():
-
-    loader = data_loader.DataLoader('../all_stocks_5yr.csv')
-
     curr_network = networks.Network("Basic", loader.stock_dict)
     path = "test.dot"
     src = curr_network.visualize_network(path)
