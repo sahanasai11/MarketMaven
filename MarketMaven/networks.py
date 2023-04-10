@@ -23,7 +23,17 @@ class Network():
     
     def visualize_network(self, path):
         nx.drawing.nx_agraph.write_dot(self.network, path)
-        return graphviz.Source.from_file(path).source
+        graphviz_source = graphviz.Source.from_file(path)
+        graphviz_g = graphviz.Graph()
+        source_lines = str(graphviz_source).splitlines()
+        source_lines.pop(0)
+        source_lines.pop(-1)
+        graphviz_g.body += source_lines
+
+        graphviz_g.graph_attr['layout'] = "sfdp"
+        graphviz_g.graph_attr['overlap'] = "prism"
+
+        return graphviz_g.source
     
     def mean(self, stock_i):
         mean = 0
@@ -75,7 +85,7 @@ class Network():
         for key in self.stock_dict.keys():
             g.add_node(key)
             
-        adj_list = self.adj_matrix(self.create_correlation_matrix(),theta=.75)
+        adj_list = self.adj_matrix(self.create_correlation_matrix(),theta=.9)
         dict_keys = list(self.stock_dict.keys())
         
         for row_index in range(len(adj_list)):
