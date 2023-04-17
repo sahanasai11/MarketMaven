@@ -93,6 +93,32 @@ class Network():
                 if adj_list[row_index][col_index]:
                     g.add_edge(dict_keys[row_index], dict_keys[col_index])
         return g
+    
+    def solve_optimization_problem(self):
+        return 1/3  
+    
+    def find_average_centralities(self):
+        average_centrailites = dict()
+        graph = self.network
+        scale_factor = self.solve_optimization_problem()
+        
+        degree_centrality = nx.degree_centrality(graph)
+        closeness_centrality = nx.closeness_centrality(graph)
+        betweenness_centrality = nx.betweenness_centrality(graph)
+        
+        for node in graph.nodes():
+            average_centrailites[node] = scale_factor * (degree_centrality[node] + closeness_centrality[node] + betweenness_centrality[node])
+            
+            
+        return average_centrailites
+    
+    def get_top_stocks(self, top_percent):
+        graph = self.network
+        c_avgs = self.find_average_centralities()
+        sorted_c_avgs = sorted(c_avgs, key=c_avgs.get, reverse=True)
+        num_stocks = math.floor(top_percent * len(c_avgs.keys()))
+        return sorted_c_avgs[:num_stocks]
+
 
 
 

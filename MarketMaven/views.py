@@ -12,6 +12,7 @@ def set_data():
 @app.route("/")
 def index():
     curr_network = networks.Network("Basic", loader.stock_dict)
+    best_stocks = curr_network.get_top_stocks(.05)
     path = "test.dot"
     src = curr_network.visualize_network(path)
-    return render_template("index.html", network_source=src)
+    return render_template("index.html", network_source=src, best_stocks=best_stocks)
