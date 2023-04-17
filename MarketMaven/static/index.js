@@ -8,10 +8,10 @@
      * Initialize the homepage of the website
      */
     async function init() {
-
-
+        console.log('init');
     }
 
-    init();
+
+  init();
     
 })();

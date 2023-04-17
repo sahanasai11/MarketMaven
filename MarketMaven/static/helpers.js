@@ -7,6 +7,14 @@ function id(idName) {
     return document.getElementById(idName);
 }
 /**
+ * Returns elements that have the class attribute with the specified value.
+ * @param {string} className - element class
+ * @returns {object} DOM object associated with class (null if none).
+ */
+function getClassElems(className) {
+  return document.getElementsByClassName(className);
+}
+/**
  * Returns the first element that matches the given CSS selector.
  * @param {string} selector - CSS query selector string.
  * @returns {object} first element matching the selector in the DOM tree (null if 
