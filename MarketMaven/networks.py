@@ -5,6 +5,13 @@ import math
 
 
 class Network():
+
+    '''
+    name: Name of network
+    stock_dict: Dictionary representation of stock network where key is stock ticker symbol,
+                value is list dictionaries where each dictionary signifies data for a day
+                for a stock
+    '''
     def __init__(self, name, stock_dict={}) -> None:
         self.name = name 
         self.stock_dict = stock_dict
