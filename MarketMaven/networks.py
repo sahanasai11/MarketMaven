@@ -28,17 +28,31 @@ class Network():
         for node_1, node_2 in edges:
             self.network.add_edge(node_1, node_2)
     
+    def add_attributes(self, g, font_name, graph_label, node_color, edge_color):
+        g.graph_attr['layout'] = "sfdp"
+        g.graph_attr['overlap'] = "prism"
+        g.graph_attr['fontname'] = font_name
+        g.graph_attr['label'] = graph_label
+
+        g.node_attr['fontname'] = font_name
+        g.node_attr['color'] = node_color
+        g.node_attr['style'] = "filled"
+
+        g.edge_attr['fontname'] = font_name
+        g.edge_attr['color'] = edge_color
+        return g
+
+    
     def visualize_network(self, path):
         nx.drawing.nx_agraph.write_dot(self.network, path)
         graphviz_source = graphviz.Source.from_file(path)
         graphviz_g = graphviz.Graph()
+        
         source_lines = str(graphviz_source).splitlines()
         source_lines.pop(0)
         source_lines.pop(-1)
         graphviz_g.body += source_lines
-
-        graphviz_g.graph_attr['layout'] = "sfdp"
-        graphviz_g.graph_attr['overlap'] = "prism"
+        graphviz_g = self.add_attributes(graphviz_g, "Courier", self.name, "darkseagreen4", "coral4")
 
         return graphviz_g.source
     

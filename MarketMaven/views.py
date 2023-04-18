@@ -35,6 +35,7 @@ def index():
         best_stocks = curr_network.get_top_stocks(.05)
         path = os.path.join(network_name) + ".dot"
         src = curr_network.visualize_network(path)
+        print(src)
 
         return render_template("index.html", 
                             network_source=src, 
