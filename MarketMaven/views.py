@@ -32,13 +32,15 @@ def index():
 
         network_name = exchange + "_network_graph"
         curr_network = networks.Network(network_name, loader.stock_dict)
-        best_stocks = curr_network.get_top_stocks(.05)
+        top_decile_stocks = curr_network.get_stocks_by_percent(.10, True)
+        bottom_decile_stocks = curr_network.get_stocks_by_percent(.10, False)
         path = os.path.join(network_name) + ".dot"
         src = curr_network.visualize_network(path)
         print(src)
 
         return render_template("index.html", 
                             network_source=src, 
-                            best_stocks=best_stocks,
+                            top_decile_stocks=top_decile_stocks,
+                            bottom_decile_stocks=bottom_decile_stocks,
                             exchange_name=exchange)
 

@@ -133,11 +133,11 @@ class Network():
             
         return average_centrailites
     
-    def get_top_stocks(self, top_percent):
+    def get_stocks_by_percent(self, percent, reverse):
         graph = self.network
         c_avgs = self.find_average_centralities()
-        sorted_c_avgs = sorted(c_avgs, key=c_avgs.get, reverse=True)
-        num_stocks = math.floor(top_percent * len(c_avgs.keys()))
+        sorted_c_avgs = sorted(c_avgs, key=c_avgs.get, reverse=reverse)
+        num_stocks = math.floor(percent * len(c_avgs.keys()))
         return sorted_c_avgs[:num_stocks]
 
 
