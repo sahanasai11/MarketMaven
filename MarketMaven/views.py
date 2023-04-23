@@ -22,6 +22,10 @@ def index():
     
     elif request.method == 'POST':
 
+        ### TODO:
+        # 1. change stock dictionary to be compatiable with new data and use price at the end of the month 
+        #
+
         print(request.form)
 
         starting_amount = request.form['starting-amount']
