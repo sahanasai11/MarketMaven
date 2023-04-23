@@ -2,7 +2,7 @@
 Caltech CS 145
 
 Setup:
-- Create virtual environment (only need to do this once): `python3 -m venv venv`
+- Create virtual environment (only need to do this step once): `python3 -m venv venv`
 - Activate virtual environment: `source venv/bin/activate`
 - Install dependencies: `pip install -r requirements.txt`
 - To run application:
