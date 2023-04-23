@@ -9,7 +9,7 @@ global loader
 
 def set_data():
     global loader
-    loader = data_loader.DataLoader('../all_stocks_5yr.csv')
+    loader = data_loader.DataLoader('../data/all_stocks_5yr.csv')
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
