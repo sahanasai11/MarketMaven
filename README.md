@@ -12,3 +12,9 @@ Setup:
     
 - To update dependencies (make sure you're not in MarketMaven directory): `pip freeze > requirements.txt`
 - If you need to change port: `export FLASK_RUN_PORT=8000`
+
+- To update schemas:
+    - Ensure you're in virtual environment
+    - Go to MarketMaven directory
+    - `flask db migrate -m <message>`
+    - `flask db upgrade`
