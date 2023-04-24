@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from . import app
 from . import networks
 from . import data_loader
+from . import db
+from MarketMaven import schemas
 
 import os
 
@@ -10,6 +12,11 @@ global loader
 def set_data():
     global loader
     loader = data_loader.DataLoader('../data/all_stocks_5yr.csv')
+
+# For flask shell
+@app.shell_context_processor
+def make_shell_context():
+    return {'db': db, 'MonthlyTransaction': schemas.MonthlyTransaction}
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
