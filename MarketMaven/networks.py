@@ -2,7 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import graphviz
 import math 
-
+from . import db
+from MarketMaven.schemas import * 
 
 class Network():
 
@@ -12,18 +13,20 @@ class Network():
                 value is list dictionaries where each dictionary signifies data for a day
                 for a stock
     '''
-    def __init__(self, name, stock_dict={}) -> None:
+    def __init__(self, name, exchange) -> None:
         self.name = name 
-        self.stock_dict = stock_dict
+        self.exchange = exchange
         self.network= self.create_correlation_network()
-        
     
+
     def get_network(self):
         return self.network 
     
+
     def get_name(self):
         return self.name 
     
+
     def add_edges(self, edges):
         for node_1, node_2 in edges:
             self.network.add_edge(node_1, node_2)
@@ -56,38 +59,45 @@ class Network():
 
         return graphviz_g.source
     
-    def mean(self, stock_i):
+    def mean(self, permno_i_lst):
         mean = 0
-        for item in self.stock_dict[stock_i]:
-            mean += item['close']
-        return mean/len(self.stock_dict[stock_i])
+
+        for item in permno_i_lst:
+            mean += item[1]
+        return mean/len(permno_i_lst)
     
-    def cross_correlation(self, stock_i, stock_j):
+    def cross_correlation(self, permno_i, permno_j):
         cross_c = 0
         numerator = 0
         denom_i = 0 
         denom_j = 0
-        mean_i = self.mean(stock_i)
-        mean_j = self.mean(stock_j)
 
-        for item_i in self.stock_dict[stock_i]:
-            for item_j in self.stock_dict[stock_j]:
-                if item_i['date'] == item_j['date']:
-                    numerator += (item_i['close'] - mean_i) * (item_j['close'] - mean_j)
-                    denom_i += (item_i['close'] - mean_i)**2
-                    denom_j += (item_j['close'] - mean_j)**2
+        permno_i_lst = db.session.query(MonthlyTransaction.date, MonthlyTransaction.returns).filter(MonthlyTransaction.permno == permno_i).all()
+        permno_j_lst = db.session.query(MonthlyTransaction.date, MonthlyTransaction.returns).filter(MonthlyTransaction.permno == permno_j).all()
+        mean_i = self.mean(permno_i, permno_i_lst)
+        mean_j = self.mean(permno_j, permno_j_lst)
+
+        for item_i in permno_i_lst:
+            for item_j in permno_j_lst:
+
+                if item_i[0] == item_j[0]:
+                    numerator += (item_i[1] - mean_i) * (item_j[1] - mean_j)
+                    denom_i += (item_i[1] - mean_i)**2
+                    denom_j += (item_j[1] - mean_j)**2
                     
 
         return numerator/(math.sqrt(denom_i) * math.sqrt(denom_j))
 
-    def create_correlation_matrix(self):
+
+    def create_correlation_matrix(self, permnos):
         lst = []
-        for i in self.stock_dict.keys():
+        for i in permnos:
             sub_lst = []
-            for j in self.stock_dict.keys():
+            for j in permnos:
                 sub_lst.append(self.cross_correlation(i, j))
             lst.append(sub_lst)
         return lst 
+
 
     def adj_matrix(self, correlation_matrix, theta):
         lst = []
@@ -101,23 +111,27 @@ class Network():
             lst.append(sub_lst)
         return lst
 
+
     def create_correlation_network(self):
         g = nx.Graph()
-        for key in self.stock_dict.keys():
-            g.add_node(key)
-            
-        adj_list = self.adj_matrix(self.create_correlation_matrix(),theta=.9)
-        dict_keys = list(self.stock_dict.keys())
         
+        permnos = db.session.query(MonthlyTransaction.permno).distinct().all()
+        for i in range(len(permnos)):
+            permnos[i] = permnos[i][0]
+            g.add_node(permnos[i])
+       
+        adj_list = self.adj_matrix(self.create_correlation_matrix(permnos),theta=.9)
+
         for row_index in range(len(adj_list)):
             for col_index in range(len(adj_list[row_index])):
                 if adj_list[row_index][col_index]:
-                    g.add_edge(dict_keys[row_index], dict_keys[col_index])
+                    g.add_edge(permnos[row_index], permnos[col_index])
         return g
     
+
     def solve_optimization_problem(self):
         return 1/3  
-    
+
     def find_average_centralities(self):
         average_centrailites = dict()
         graph = self.network

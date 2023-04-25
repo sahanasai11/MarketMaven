@@ -1,17 +1,11 @@
 from flask import Flask, render_template, request
 from . import app
 from . import networks
-from . import data_loader
 from . import db
 from MarketMaven import schemas
 
 import os
 
-global loader
-
-def set_data():
-    global loader
-    loader = data_loader.DataLoader('../data/all_stocks_5yr.csv')
 
 # For flask shell
 @app.shell_context_processor
@@ -29,10 +23,6 @@ def index():
     
     elif request.method == 'POST':
 
-        ### TODO:
-        # 1. change stock dictionary to be compatiable with new data and use price at the end of the month 
-        #
-
         print(request.form)
 
         starting_amount = request.form['starting-amount']
@@ -42,7 +32,9 @@ def index():
         exchange = request.form['exchange']
 
         network_name = exchange + "_network_graph"
-        curr_network = networks.Network(network_name, loader.stock_dict)
+
+        ############################################
+        curr_network = networks.Network(network_name, exchange)
         top_decile_stocks = curr_network.get_stocks_by_percent(.10, True)
         bottom_decile_stocks = curr_network.get_stocks_by_percent(.10, False)
         path = os.path.join(network_name) + ".dot"

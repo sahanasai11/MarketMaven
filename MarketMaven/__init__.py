@@ -12,6 +12,7 @@ migrate = Migrate(app, db)
 
 from MarketMaven.schemas import *
 
+
 from datetime import datetime
 
 ### This is to intialize loading data when the app is intialized. The data is 
@@ -37,8 +38,6 @@ with app.app_context():
 
             print(header)
             db.session.commit()
-
-            
-
     print('MonthlyTransaction table populated')
+            
 
