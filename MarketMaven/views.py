@@ -32,14 +32,16 @@ def index():
         exchange = request.form['exchange']
 
         network_name = exchange + "_network_graph"
-
-        ############################################
+        print("starting creating network")
         curr_network = networks.Network(network_name, exchange)
+        print("finished creating network")
         top_decile_stocks = curr_network.get_stocks_by_percent(.10, True)
         bottom_decile_stocks = curr_network.get_stocks_by_percent(.10, False)
         path = os.path.join(network_name) + ".dot"
+        print("starting visualizing network")
         src = curr_network.visualize_network(path)
-        print(src)
+        print("finished visualizing network")
+        #print(src)
 
         return render_template("index.html", 
                             network_source=src, 

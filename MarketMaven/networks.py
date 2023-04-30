@@ -2,9 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import graphviz
 import math 
-from . import db
+from . import db, adj_list
 from MarketMaven.schemas import * 
 
+# need to import global data_list
 class Network():
 
     '''
@@ -58,69 +59,16 @@ class Network():
         graphviz_g = self.add_attributes(graphviz_g, "Courier", self.name, "darkseagreen4", "coral4")
 
         return graphviz_g.source
-    
-    def mean(self, permno_i_lst):
-        mean = 0
-
-        for item in permno_i_lst:
-            mean += item[1]
-        return mean/len(permno_i_lst)
-    
-    def cross_correlation(self, permno_i, permno_j):
-        cross_c = 0
-        numerator = 0
-        denom_i = 0 
-        denom_j = 0
-
-        permno_i_lst = db.session.query(MonthlyTransaction.date, MonthlyTransaction.returns).filter(MonthlyTransaction.permno == permno_i).all()
-        permno_j_lst = db.session.query(MonthlyTransaction.date, MonthlyTransaction.returns).filter(MonthlyTransaction.permno == permno_j).all()
-        mean_i = self.mean(permno_i, permno_i_lst)
-        mean_j = self.mean(permno_j, permno_j_lst)
-
-        for item_i in permno_i_lst:
-            for item_j in permno_j_lst:
-
-                if item_i[0] == item_j[0]:
-                    numerator += (item_i[1] - mean_i) * (item_j[1] - mean_j)
-                    denom_i += (item_i[1] - mean_i)**2
-                    denom_j += (item_j[1] - mean_j)**2
-                    
-
-        return numerator/(math.sqrt(denom_i) * math.sqrt(denom_j))
-
-
-    def create_correlation_matrix(self, permnos):
-        lst = []
-        for i in permnos:
-            sub_lst = []
-            for j in permnos:
-                sub_lst.append(self.cross_correlation(i, j))
-            lst.append(sub_lst)
-        return lst 
-
-
-    def adj_matrix(self, correlation_matrix, theta):
-        lst = []
-        for row_index in range(len(correlation_matrix)):
-            sub_lst = []
-            for col_index in range(len(correlation_matrix[row_index])):
-                if row_index != col_index and abs(correlation_matrix[row_index][col_index]) > theta:
-                    sub_lst.append(1)
-                else:
-                    sub_lst.append(0)
-            lst.append(sub_lst)
-        return lst
-
 
     def create_correlation_network(self):
         g = nx.Graph()
-        
         permnos = db.session.query(MonthlyTransaction.permno).distinct().all()
         for i in range(len(permnos)):
             permnos[i] = permnos[i][0]
             g.add_node(permnos[i])
        
-        adj_list = self.adj_matrix(self.create_correlation_matrix(permnos),theta=.9)
+        # adj_list is now a global variable
+        # adj_list = self.adj_matrix(self.create_correlation_matrix(permnos),theta=.9)
 
         for row_index in range(len(adj_list)):
             for col_index in range(len(adj_list[row_index])):
