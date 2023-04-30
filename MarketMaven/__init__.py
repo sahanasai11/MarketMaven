@@ -86,25 +86,25 @@ from datetime import datetime
 with app.app_context():
 
     # Populate MonthlyTransaction table if empty
-    if MonthlyTransaction.query.count() == 0:
-        with open('data/monthly_stock.csv') as f:
-            print('populating MonthlyTransaction table')
-            reader = csv.reader(f)
-            header = next(reader)
+    # if MonthlyTransaction.query.count() == 0:
+    #     with open('data/monthly_stock.csv') as f:
+    #         print('populating MonthlyTransaction table')
+    #         reader = csv.reader(f)
+    #         header = next(reader)
 
-            for i in reader:
-                kwargs = {col: value for col, value in zip(header, i)}
-                kwargs['date'] = datetime.strptime(kwargs['date'], '%Y-%m-%d').date()
-                entry = MonthlyTransaction(**kwargs)
-                db.session.add(entry)
+    #         for i in reader:
+    #             kwargs = {col: value for col, value in zip(header, i)}
+    #             kwargs['date'] = datetime.strptime(kwargs['date'], '%Y-%m-%d').date()
+    #             entry = MonthlyTransaction(**kwargs)
+    #             db.session.add(entry)
 
-            print(header)
-            db.session.commit()
-        print('MonthlyTransaction table populated')
-        print("Creating adjancecy list")
-        permnos = db.session.query(MonthlyTransaction.permno).distinct().all()
-        adj_list = adj_matrix(create_correlation_matrix(permnos),theta=.9) 
-        print("Finished adjancecy list")
+    #         print(header)
+    #         db.session.commit()
+    #     print('MonthlyTransaction table populated')
+    #     print("Creating adjancecy list")
+    #     permnos = db.session.query(MonthlyTransaction.permno).distinct().all()
+    #     adj_list = adj_matrix(create_correlation_matrix(permnos),theta=.9) 
+    print("Finished adjancecy list")
 
 
 

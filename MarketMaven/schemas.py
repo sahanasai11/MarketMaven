@@ -48,18 +48,3 @@ class MonthlyTransactionFFM(db.Model):
 
     def __repr__(self):
         return '<Monthly_Transaction_FFM ID = {}, date = {}>'.format(self.monthly_transaction_ffm_id, self.date)
-    
-    
-# TODO: RUN FLASK DB MIGRATE AND FLASK DB UPGRADE SINCE THIS TABLE
-# DOESNT EXIST IN SCRIPTS YET. WANT TO CHECK W HELEN FIRST
-class MonthlyTransactionFFM(db.Model):
-    monthly_transaction_ffm_id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, index=True)
-    market_minus_risk_free = db.Column(db.Float, index=True)
-    small_minus_big = db.Column(db.Float, index=True)
-    high_minus_low = db.Column(db.Float, index=True)
-    risk_free = db.Column(db.Float, index=True)
-    market_rate = db.Column(db.Float, index=True)
-
-    def __repr__(self):
-        return '<Monthly_Transaction_FFM ID = {}, date = {}>'.format(self.monthly_transaction_ffm_id, self.date)
