@@ -8,7 +8,11 @@
      * Initialize the homepage of the website
      */
     async function init() {
-        console.log('init');
+      // $(document).ready(function() {
+      //   $('.form-multiple-submit').multiselect({
+      //     includeSelectAllOption: true,
+      //   });
+      // });
     }
 
 

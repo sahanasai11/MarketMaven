@@ -13,7 +13,7 @@
     <script>    
         //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
         d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-    </script> 
+    </script>
 {% endblock %}
 
 {% block app_content %}
@@ -38,7 +38,7 @@
 
                     <div id="sectors-div">
                         <label for="stocks">Sectors:</label>
-                        <select class="form-select" name="sectors">
+                        <select class="form-multiple-select selectpicker" name="sectors" multiple>
                             <option value="energy">Energy</option>
                             <option value="materials">Materials</option>
                             <option value="industrials">Industrials</option>
@@ -54,8 +54,8 @@
                     </div>
 
                     <div id="stocks-div">
-                        <label for="stocks">Stocks:</label>
-                        <select class="form-select" name="stocks">
+                        <label for="stocks">Stocks:</label><br>
+                        <select class="form-multiple-select selectpicker" name="stocks" multiple>
                             {% for ticker in tickers %}
                                 {% set ticker = ticker[0] %}
                                 <option value="{{ ticker }}">{{ ticker }}</option>
@@ -70,7 +70,7 @@
 
                     <div id="exchanges-div">
                         <label for="exchange">Exchange:</label>
-                        <select class="form-select" name="exchange">
+                        <select class="form-select select-picker" name="exchange">
                             <option value="S&P-500">S&P-500</option>
                             <option value="NYSE">NYSE</option>
                             <option value="NASDAQ">NASDAQ</option>

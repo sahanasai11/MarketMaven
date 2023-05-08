@@ -16,7 +16,6 @@ def make_shell_context():
 def index():
 
     tickers = db.session.query(schemas.Ticker.ticker_symbol).distinct().all()
-    print(tickers[0], tickers[1], tickers[2])
 
     if request.method == 'GET':
         return render_template("index.html", 
@@ -31,8 +30,8 @@ def index():
 
         starting_amount = request.form['starting-amount']
         years_to_grow = request.form['years-to-grow']
-        sectors = request.form['sectors']
-        stocks = request.form['stocks']
+        sectors = request.form.getlist('sectors')
+        stocks = request.form.getlist('stocks')
         exchange = request.form['exchange']
 
         network_name = exchange + "_network_graph"
