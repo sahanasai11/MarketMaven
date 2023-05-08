@@ -13,7 +13,6 @@ bootstrap = Bootstrap(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-adj_list = # load csv 
 
 
 from MarketMaven.schemas import *
