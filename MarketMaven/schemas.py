@@ -5,7 +5,7 @@ from . import db
 # Ticker symbols to permno mappings
 class Ticker(db.Model):
     permno = db.Column(db.Integer, primary_key=True)
-    ticker = db.Column(db.String, index=True)
+    ticker_symbol = db.Column(db.String, index=True)
 
     def __repr__(self):
         return '<Ticker = {}, permno = {}'.format(self.ticker, self.permno)

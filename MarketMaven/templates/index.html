@@ -56,9 +56,10 @@
                     <div id="stocks-div">
                         <label for="stocks">Stocks:</label>
                         <select class="form-select" name="stocks">
-                            <option value="AAPL">AAPL</option>
-                            <option value="MSFT">MSFT</option>
-                            <option value="AMZN">AMZN</option>
+                            {% for ticker in tickers %}
+                                {% set ticker = ticker[0] %}
+                                <option value="{{ ticker }}">{{ ticker }}</option>
+                            {% endfor %}
                         </select>  
                     </div>
 
