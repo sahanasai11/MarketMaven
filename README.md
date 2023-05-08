@@ -18,3 +18,6 @@ Setup:
     - Go to MarketMaven directory
     - `flask db migrate -m <message>`
     - `flask db upgrade`
+
+- The adjacency list CSV should be uploaded already, but if not, run the load_adj_matrix file. 
+    Note, the db needs to be loaded in order to populate the list csv. 
