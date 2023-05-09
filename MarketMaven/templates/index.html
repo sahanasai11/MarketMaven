@@ -1,105 +1,125 @@
 {% extends "base.html" %}
 
-{% block app_styles %}
-    <link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
-{% endblock %}
+{% block app_head %}
+    {% block app_scripts %}
+        {{super()}}
+        <script src="//d3js.org/d3.v5.min.js"></script>
+        <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+        <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
 
-{% block app_scripts %}
-    <script src="//d3js.org/d3.v5.min.js"></script>
-    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
-    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
-    <script src="{{url_for('.static', filename='helpers.js')}}"></script>
-    <script defer src="{{url_for('.static', filename='index.js')}}"></script>
-    <script>    
-        //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
-        d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-    </script> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+        <script src="{{url_for('.static', filename='utils.js')}}"></script>
+        <script defer src="{{url_for('.static', filename='index.js')}}"></script>
+        <script>    
+            //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
+            d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('#selectpicker-sectors').selectpicker();
+                $('#selectpicker-stocks').selectpicker('refresh');
+                $('#selectpicker-exchanges').selectpicker('refresh');
+            });
+        </script>
+
+    {% endblock %}
+
+    {% block app_styles %}
+        {{super()}}
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css" />
+        <link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}" />
+    {% endblock %}
 {% endblock %}
 
 {% block app_content %}
-    <div id="index">
-        <div id="settings-card" class="card">
-            <form id="settings-form" method="POST" action="/" enctype="multipart/form-data">
-                <div class="form-elements">
-                    <div id="starting-amount">
-                        <label for="starting-amount">Starting amount:</label><br>
-                        <input class="text-input" type="text" id="starting-amount-input" name="starting-amount" value="$1000">
-                    </div>
-
-                    <div id="years-to-grow">
-                        <label for="years-to-grow">Years to grow:</label><br>
-                        <input class="text-input" type="text" id="years-to-grow-input" name="years-to-grow" value="5">
-                    </div>
-
-                    <div id="risk-tolerance" class="slidecontainer">
-                        <label for="risk-tolerance">Risk tolerance:</label><br>
-                        <input type="range" min="1" max="100" value="50" class="slider" id="risk-tolerance-input">
-                    </div>
-
-                    <div id="sectors-div">
-                        <label for="stocks">Sectors:</label>
-                        <select class="form-select" name="sectors">
-                            <option value="energy">Energy</option>
-                            <option value="materials">Materials</option>
-                            <option value="industrials">Industrials</option>
-                            <option value="utilities">Utilities</option>
-                            <option value="healthcare">Healthcare</option>
-                            <option value="financials">Financials</option>
-                            <option value="consumer-discretionary">Consumer Discretionary</option>
-                            <option value="consumer-staples">Consumer Staples</option>
-                            <option value="information-technology">Information Technology</option>
-                            <option value="communication-services">Communication Services</option>
-                            <option value="real-estate">Real Estate</option>
-                        </select>  
-                    </div>
-
-                    <div id="stocks-div">
-                        <label for="stocks">Stocks:</label>
-                        <select class="form-select" name="stocks">
-                            <option value="AAPL">AAPL</option>
-                            <option value="MSFT">MSFT</option>
-                            <option value="AMZN">AMZN</option>
-                        </select>  
-                    </div>
-
-                    <div id="fractional-investing">
-                        <label for="fractional-investing">Allow Fractional Shares</label>
-                        <input type="checkbox" id="fractional-investing-input">
-                    </div>
-
-                    <div id="exchanges-div">
-                        <label for="exchange">Exchange:</label>
-                        <select class="form-select" name="exchange">
-                            <option value="S&P-500">S&P-500</option>
-                            <option value="NYSE">NYSE</option>
-                            <option value="NASDAQ">NASDAQ</option>
-                        </select>  
-                    </div>
-
-                    <div>
-                        <input type="submit" value="Submit" id="submit-settings-btn">
-                    </div>
-
+    <div id="settings-card" class="card">
+        <form id="settings-form" method="POST" action="/" enctype="multipart/form-data">
+            <div class="form-elements">
+                <div id="starting-amount">
+                    <label for="starting-amount">Starting amount:</label><br>
+                    <input class="text-input" type="text" id="starting-amount-input" name="starting-amount" value="$1000">
                 </div>
-            </form>
-        </div>
 
-        <div id="etf-card" class="card graph">
-            <h1><span id="exchange-name">{{ exchange_name }}</span> Network</h1>
-            <div id="etf-graph">
+                <div id="years-to-grow">
+                    <label for="years-to-grow">Years to grow:</label><br>
+                    <input class="text-input" type="text" id="years-to-grow-input" name="years-to-grow" value="5">
+                </div>
+
+                <div id="risk-tolerance" class="slidecontainer">
+                    <label for="risk-tolerance">Risk tolerance:</label><br>
+                    <input type="range" min="1" max="100" value="50" class="slider" id="risk-tolerance-input">
+                </div>
+
+                <div id="sectors-div">
+                    <label for="stocks">Sectors:</label><br>
+                    <select class="dropdown" id="selectpicker-sectors" name="sectors" multiple>
+                        <option value="energy">Energy</option>
+                        <option value="materials">Materials</option>
+                        <option value="industrials">Industrials</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="financials">Financials</option>
+                        <option value="consumer-discretionary">Consumer Discretionary</option>
+                        <option value="consumer-staples">Consumer Staples</option>
+                        <option value="information-technology">Information Technology</option>
+                        <option value="communication-services">Communication Services</option>
+                        <option value="real-estate">Real Estate</option>
+                    </select>  
+                </div>
+
+                <div id="stocks-div">
+                    <label for="stocks">Stocks:</label><br>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
+                        {% for ticker in tickers %}
+                            {% set ticker = ticker[0] %}
+                            <option value="{{ ticker }}">{{ ticker }}</option>
+                        {% endfor %}
+                    </select>  
+                </div>
+
+                <div id="exchanges-div">
+                    <label for="exchange">Exchange:</label><br>
+                    <select class="dropdown" id="selectpicker-exchanges" name="exchange">
+                        <option value="S&P-500">S&P-500</option>
+                        <option value="NYSE">NYSE</option>
+                        <option value="NASDAQ">NASDAQ</option>
+                    </select>  
+                </div>
+
+                <div id="fractional-investing">
+                    <label for="fractional-investing">Allow Fractional Shares</label>
+                    <input type="checkbox" id="fractional-investing-input">
+                </div>
+                
+                <div>
+                    <input type="submit" value="Submit" id="submit-settings-btn">
+                </div>
 
             </div>
+        </form>
+        
+    </div>
+
+    <div id="etf-card" class="card graph">
+        <h1><span id="exchange-name">{{ exchange_name }}</span> Network</h1>
+        <div id="etf-graph">
+
         </div>
+    </div>
 
-        <div id="selection-card" class="card graph">
-            <h1>Selected Strategy Network</h1>
-            <div id="selection-graph">
-                {{ top_decile_stocks}}
-                {{ bottom_decile_stocks }}
-            </div>
+    <div id="selection-card" class="card graph">
+        <h1>Selected Strategy Network</h1>
+        <div id="selection-graph">
+            {{ top_decile_stocks}}
+            {{ bottom_decile_stocks }}
         </div>
+    </div>
 
-    </div>    
-
+        
 {% endblock %}
+
 

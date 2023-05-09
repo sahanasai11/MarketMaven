@@ -10,16 +10,19 @@ import os
 # For flask shell
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'MonthlyTransaction': schemas.MonthlyTransaction}
+    return {'db': db, 'Ticker': schemas.Ticker}
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+
+    tickers = db.session.query(schemas.Ticker.ticker_symbol).distinct().all()
 
     if request.method == 'GET':
         return render_template("index.html", 
                             network_source=None, 
                             best_stocks=None,
-                            exchange_name="Exchange")
+                            exchange_name="Exchange",
+                            tickers=tickers)
     
     elif request.method == 'POST':
 
@@ -27,8 +30,8 @@ def index():
 
         starting_amount = request.form['starting-amount']
         years_to_grow = request.form['years-to-grow']
-        sectors = request.form['sectors']
-        stocks = request.form['stocks']
+        sectors = request.form.getlist('sectors')
+        stocks = request.form.getlist('stocks')
         exchange = request.form['exchange']
 
         network_name = exchange + "_network_graph"
@@ -47,5 +50,6 @@ def index():
                             network_source=src, 
                             top_decile_stocks=top_decile_stocks,
                             bottom_decile_stocks=bottom_decile_stocks,
-                            exchange_name=exchange)
+                            exchange_name=exchange,
+                            tickers=tickers)
 
