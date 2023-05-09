@@ -1,25 +1,43 @@
-.navbar-default {
-    height: 75px;
+html, body, main {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin-left: 100px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.navbar {
+    height: 80px;
 }
 
 .navbar-default .navbar-brand {
-    font-size: 40px;
-    line-height: 50px;
+    font-size: 35pt;
+    line-height: 40px;
     color: black;
-}
-
-#index {
-    display: flex;
-    flex-direction: row;
+    padding: 5px;
 }
 
 #settings-card {
-    width: 215px;
+    width: 300px;
 }
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
+    margin-bottom: 105px;
+    overflow-y: scroll;
 }
 
 .card:hover {
@@ -29,17 +47,18 @@
 .form-elements {
     display: flex;
     flex-direction: column;
-    padding: 15px;
     align-items: center;
+    padding: 10px;
 }
 
 .form-elements > div {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.slidecontainer {
-    width: 180px;
+.slidecontainer, .selectpicker, .text-input, 
+button .dropdown-toggle .bs-placeholder .btn-default {
+    width: 220px;
 }
   
 .slider {
@@ -54,8 +73,7 @@
     opacity: 1;
 }
 
-.form-select, .form-multiple-select {
-    width: 180px;
+.selectpicker {
     height: 25px;
 }
 
@@ -65,11 +83,12 @@
 
 .graph {
     margin-left: 20px;
-    width: 500px;
+    width: 600px;
     padding: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .graph h1 {
@@ -85,10 +104,9 @@ svg {
     background-color: #f8f8f8;
 }
 
-.text-input, .form-select, .form-multiple-select {
+.text-input {
     display: flex;
-    width: 180px;
-    height: 25px;
+    height: 34px;
     line-height: 3;
     border: 1px solid #ccc;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
@@ -96,6 +114,6 @@ svg {
     cursor: pointer;
 }
 
-.form-select {
-    overflow: hidden;
+select {
+    display: None;
 }
