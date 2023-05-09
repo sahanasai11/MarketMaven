@@ -61,19 +61,8 @@ class Network():
         return graphviz_g.source
 
     def create_correlation_network(self):
-        g = nx.Graph()
-        permnos = db.session.query(MonthlyTransaction.permno).distinct().all()
-        for i in range(len(permnos)):
-            permnos[i] = permnos[i][0]
-            g.add_node(permnos[i])
-       
-        # adj_list is now a global variable
-        # adj_list = self.adj_matrix(self.create_correlation_matrix(permnos),theta=.9)
-
-        for row_index in range(len(adj_list)):
-            for col_index in range(len(adj_list[row_index])):
-                if adj_list[row_index][col_index]:
-                    g.add_edge(permnos[row_index], permnos[col_index])
+        g = nx.from_numpy_array(adj_list.values, parallel_edges=True)
+        g.remove_nodes_from(list(nx.isolates(g)))
         return g
     
 
