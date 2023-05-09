@@ -56,7 +56,7 @@
 
                 <div id="sectors-div">
                     <label for="stocks">Sectors:</label><br>
-                    <select class="dropdown" id="selectpicker-sectors" name="sectors" multiple>
+                    <select class="dropdown" id="selectpicker-sectors" name="sectors" multiple data-live-search="true">
                         <option value="energy">Energy</option>
                         <option value="materials">Materials</option>
                         <option value="industrials">Industrials</option>
@@ -73,7 +73,7 @@
 
                 <div id="stocks-div">
                     <label for="stocks">Stocks:</label><br>
-                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple data-live-search="true">
                         {% for ticker in tickers %}
                             {% set ticker = ticker[0] %}
                             <option value="{{ ticker }}">{{ ticker }}</option>
@@ -83,7 +83,7 @@
 
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
-                    <select class="dropdown" id="selectpicker-exchanges" name="exchange">
+                    <select class="dropdown" id="selectpicker-exchanges" name="exchange" multiple data-live-search="true">
                         <option value="S&P-500">S&P-500</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
@@ -94,7 +94,7 @@
                     <label for="fractional-investing">Allow Fractional Shares</label>
                     <input type="checkbox" id="fractional-investing-input">
                 </div>
-                
+
                 <div>
                     <input type="submit" value="Submit" id="submit-settings-btn">
                 </div>
