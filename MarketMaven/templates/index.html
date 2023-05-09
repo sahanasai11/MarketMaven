@@ -12,7 +12,12 @@
     <script defer src="{{url_for('.static', filename='index.js')}}"></script>
     <script>    
         //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
-        d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
+        graph_curr = "NYSE_network_graph.dot"
+        //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
+
+        d3.select("#etf-graph").graphviz().renderDot('digraph {a -> b}');
+
+    </script> 
     </script> 
 {% endblock %}
 

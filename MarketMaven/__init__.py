@@ -7,16 +7,16 @@ from datetime import datetime
 import math 
 import operator
 import numpy as np
+import pandas as pd
 
 app = flask.Flask(__name__)
 bootstrap = Bootstrap(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
+adj_list = pd.read_csv("adj_matrix.csv", index_col='index')
 
 from MarketMaven.schemas import *
-
 
 with app.app_context():
     # Populate MonthlyTransaction table if empty
@@ -35,3 +35,5 @@ with app.app_context():
             print(header)
             db.session.commit()
         print('MonthlyTransaction table populated')
+
+    
