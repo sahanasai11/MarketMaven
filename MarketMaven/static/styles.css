@@ -30,7 +30,7 @@ main {
 }
 
 #settings-card {
-    width: 300px;
+    min-width: 300px;
 }
 
 .card {
@@ -73,10 +73,6 @@ button .dropdown-toggle .bs-placeholder .btn-default {
     opacity: 1;
 }
 
-.selectpicker {
-    height: 25px;
-}
-
 #submit-settings-btn {
     margin-top: 20px;
 }
@@ -84,6 +80,7 @@ button .dropdown-toggle .bs-placeholder .btn-default {
 .graph {
     margin-left: 20px;
     width: 600px;
+    min-width: 300px;
     padding: 15px;
     display: flex;
     flex-direction: column;
