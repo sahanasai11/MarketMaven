@@ -14,12 +14,7 @@ bootstrap = Bootstrap(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-<<<<<<< HEAD
-adj_list = [] # load csv 
-
-=======
 adj_list = pd.read_csv("adj_matrix.csv", index_col='index')
->>>>>>> 8b7803c6832a1b7fcf7aa2f61c4414df824556da
 
 from MarketMaven.schemas import *
 
@@ -37,13 +32,7 @@ with app.app_context():
                 db.session.add(entry)
 
             db.session.commit()
-<<<<<<< HEAD
 
 
             
 
-=======
-        print('MonthlyTransaction table populated')
-
-    
->>>>>>> 8b7803c6832a1b7fcf7aa2f61c4414df824556da
