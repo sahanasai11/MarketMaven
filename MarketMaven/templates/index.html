@@ -21,8 +21,9 @@
         <script>
             $(document).ready(function() {
                 $('#selectpicker-sectors').selectpicker();
-                $('#selectpicker-stocks').selectpicker('refresh');
-                $('#selectpicker-exchanges').selectpicker('refresh');
+                $('#selectpicker-stocks').selectpicker();
+                $('#selectpicker-exchanges').selectpicker();
+                $('#selectpicker-strategy').selectpicker();
             });
         </script>
 
@@ -38,21 +39,18 @@
 
 {% block app_content %}
     <div id="settings-card" class="card">
+        <h1>Settings</h1>
         <form id="settings-form" method="POST" action="/" enctype="multipart/form-data">
             <div class="form-elements">
-                <div id="starting-amount">
-                    <label for="starting-amount">Starting amount:</label><br>
-                    <input class="text-input" type="text" id="starting-amount-input" name="starting-amount" value="$1000">
-                </div>
 
-                <div id="years-to-grow">
-                    <label for="years-to-grow">Years to grow:</label><br>
-                    <input class="text-input" type="text" id="years-to-grow-input" name="years-to-grow" value="5">
-                </div>
-
-                <div id="risk-tolerance" class="slidecontainer">
-                    <label for="risk-tolerance">Risk tolerance:</label><br>
-                    <input type="range" min="1" max="100" value="50" class="slider" id="risk-tolerance-input">
+                <div id="stocks-div">
+                    <label for="stocks">Stocks:</label><br>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
+                        {% for ticker in tickers %}
+                            {% set ticker = ticker[0] %}
+                            <option value="{{ ticker }}">{{ ticker }}</option>
+                        {% endfor %}
+                    </select>  
                 </div>
 
                 <div id="sectors-div">
@@ -72,16 +70,6 @@
                     </select>  
                 </div>
 
-                <div id="stocks-div">
-                    <label for="stocks">Stocks:</label><br>
-                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple data-live-search="true">
-                        {% for ticker in tickers %}
-                            {% set ticker = ticker[0] %}
-                            <option value="{{ ticker }}">{{ ticker }}</option>
-                        {% endfor %}
-                    </select>  
-                </div>
-
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" multiple data-live-search="true">
@@ -91,10 +79,16 @@
                     </select>  
                 </div>
 
-                <div id="fractional-investing">
-                    <label for="fractional-investing">Allow Fractional Shares</label>
-                    <input type="checkbox" id="fractional-investing-input">
+                <div id="strategy-div">
+                    <label for="strategy">Strategy:</label><br>
+                    <select class="dropdown" id="selectpicker-strategy" name="strategy" multiple data-live-search="true">
+                        <option value="average-centrality">Average Centrality</option>
+                        <option value="degree-centrality">Degree Centrality</option>
+                        <option value="closeness-centrality">Closeness Centrality</option>
+                        <option value="betweenness-centrality">Betweenness Centrality</option>
+                    </select>  
                 </div>
+
 
                 <div>
                     <input type="submit" value="Submit" id="submit-settings-btn">
@@ -105,15 +99,15 @@
         
     </div>
 
-    <div id="etf-card" class="card graph">
-        <h1><span id="exchange-name">{{ exchange_name }}</span> Network</h1>
-        <div id="etf-graph">
+    <div id="network-card" class="card graph">
+        <h1>Selected Strategy Network</h1>
+        <div id="selection-network">
 
         </div>
     </div>
 
     <div id="selection-card" class="card graph">
-        <h1>Selected Strategy Network</h1>
+        <h1>Selected Strategy Graph</h1>
         <div id="selection-graph">
             {{ top_decile_stocks}}
             {{ bottom_decile_stocks }}

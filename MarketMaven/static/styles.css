@@ -5,6 +5,7 @@ html, body, main {
 body {
     display: flex;
     flex-direction: column;
+    background-color: #e9f7e8;
 }
 
 .container {
@@ -20,24 +21,41 @@ main {
 
 .navbar {
     height: 80px;
+    background-color: #4f914f;
+}
+
+#logo {
+    width: 60px;
+    height: 60px;
+}
+
+.navbar-default {
+    border: None;
+    border-radius: 0%;
 }
 
 .navbar-default .navbar-brand {
     font-size: 35pt;
-    line-height: 40px;
-    color: black;
+    line-height: 60px;
+    color: white;
     padding: 5px;
+    margin-left: 100px;
 }
 
 #settings-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     min-width: 300px;
+    padding: 15px;
 }
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     margin-bottom: 105px;
-    overflow-y: scroll;
+    background-color: white;
+
 }
 
 .card:hover {
@@ -56,21 +74,8 @@ main {
     margin-bottom: 10px;
 }
 
-.slidecontainer, .selectpicker, .text-input, 
-button .dropdown-toggle .bs-placeholder .btn-default {
+.selectpicker, button .dropdown-toggle .bs-placeholder .btn-default {
     width: 220px;
-}
-  
-.slider {
-    height: 25px;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-.slider:hover {
-    opacity: 1;
 }
 
 #submit-settings-btn {
@@ -88,10 +93,8 @@ button .dropdown-toggle .bs-placeholder .btn-default {
     overflow: hidden;
 }
 
-.graph h1 {
-    color: #777;
+h1 {
     margin-bottom: 10px;
-    margin-top: 5px;
     font-size: 20pt;
 }
 
@@ -99,16 +102,6 @@ svg {
     width: 400px;
     height: 400px;
     background-color: #f8f8f8;
-}
-
-.text-input {
-    display: flex;
-    height: 34px;
-    line-height: 3;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    border-radius: .25em;
-    cursor: pointer;
 }
 
 select {

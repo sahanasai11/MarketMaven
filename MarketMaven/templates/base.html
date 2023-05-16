@@ -17,16 +17,10 @@
 {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <a class="navbar-brand" href="{{ url_for('index') }}">Market Maven</a>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="{{ url_for('index') }}">MarketMaven</a>
+    <img id="logo" src="{{url_for('.static', filename='img/marketmavenlogo.png')}}" class="d-inline-block align-top" alt="MarketMaven logo">
+  </nav>
 {% endblock %}
 
 {% block content %}
