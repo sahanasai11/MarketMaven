@@ -38,18 +38,17 @@
 {% endblock %}
 
 {% block app_content %}
-    <div id="settings-card" class="card">
-        <h1>Settings</h1>
-        <form id="settings-form" method="POST" action="/" enctype="multipart/form-data">
+    <div id="preferences-card" class="card">
+        <h1>Preferences</h1>
+        <form id="preferences-form" method="POST" action="/" enctype="multipart/form-data">
             <div class="form-elements">
-
-                <div id="stocks-div">
-                    <label for="stocks">Stocks:</label><br>
-                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
-                        {% for ticker in tickers %}
-                            {% set ticker = ticker[0] %}
-                            <option value="{{ ticker }}">{{ ticker }}</option>
-                        {% endfor %}
+                
+                <div id="exchanges-div">
+                    <label for="exchange">Exchange:</label><br>
+                    <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
+                        <option value="S&P-500">S&P-500</option>
+                        <option value="NYSE">NYSE</option>
+                        <option value="NASDAQ">NASDAQ</option>
                     </select>  
                 </div>
 
@@ -70,18 +69,19 @@
                     </select>  
                 </div>
 
-                <div id="exchanges-div">
-                    <label for="exchange">Exchange:</label><br>
-                    <select class="dropdown" id="selectpicker-exchanges" name="exchange" multiple data-live-search="true">
-                        <option value="S&P-500">S&P-500</option>
-                        <option value="NYSE">NYSE</option>
-                        <option value="NASDAQ">NASDAQ</option>
+                <div id="stocks-div">
+                    <label for="stocks">Stocks:</label><br>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
+                        {% for ticker in tickers %}
+                            {% set ticker = ticker[0] %}
+                            <option value="{{ ticker }}">{{ ticker }}</option>
+                        {% endfor %}
                     </select>  
                 </div>
 
                 <div id="strategy-div">
                     <label for="strategy">Strategy:</label><br>
-                    <select class="dropdown" id="selectpicker-strategy" name="strategy" multiple data-live-search="true">
+                    <select class="dropdown" id="selectpicker-strategy" name="strategy" data-live-search="true">
                         <option value="average-centrality">Average Centrality</option>
                         <option value="degree-centrality">Degree Centrality</option>
                         <option value="closeness-centrality">Closeness Centrality</option>
@@ -91,7 +91,7 @@
 
 
                 <div>
-                    <input type="submit" value="Submit" id="submit-settings-btn">
+                    <input type="submit" value="Submit" id="submit-preferences-btn">
                 </div>
 
             </div>
@@ -100,14 +100,14 @@
     </div>
 
     <div id="network-card" class="card graph">
-        <h1>Selected Strategy Network</h1>
+        <h1>Selected Portfolio Network</h1>
         <div id="selection-network">
 
         </div>
     </div>
 
     <div id="selection-card" class="card graph">
-        <h1>Selected Strategy Graph</h1>
+        <h1>Selected Strategy Returns</h1>
         <div id="selection-graph">
             {{ top_decile_stocks}}
             {{ bottom_decile_stocks }}
