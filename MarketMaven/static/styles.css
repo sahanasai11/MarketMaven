@@ -107,3 +107,9 @@ svg {
 select {
     display: None;
 }
+
+#selection-network img, #selection-graph img {
+    width: 90%;
+    height: auto;
+}
+

@@ -3,6 +3,7 @@ from . import app
 from . import networks
 from . import db
 from MarketMaven import schemas
+from MarketMaven.financial_models import *
 
 import os
 
@@ -28,18 +29,30 @@ def index():
 
         print(request.form)
 
-        starting_amount = request.form['starting-amount']
-        years_to_grow = request.form['years-to-grow']
-        sectors = request.form.getlist('sectors')
-        stocks = request.form.getlist('stocks')
+        #starting_amount = request.form['starting-amount']
+        #years_to_grow = request.form['years-to-grow']
+        #sectors = request.form.getlist('sectors')
+        #stocks = request.form.getlist('stocks')
         exchange = request.form['exchange']
-
         network_name = exchange + "_network_graph"
         print("starting creating network")
+        print(exchange)
+
+        
         curr_network = networks.Network(network_name, exchange)
         print("finished creating network")
-        top_decile_stocks =[] #curr_network.get_stocks_by_percent(.10, True)
-        bottom_decile_stocks = []#curr_network.get_stocks_by_percent(.10, False)
+        curr_portfolio = curr_network.get_portfolio(10)
+
+        print("MEAN MONTHLY RETURNS")
+        print(f"FF Equal Portfolio: {compute_monthly_average(curr_portfolio['EQ'])}")
+        print()
+        print("MONTHLY VOLATILITY")
+        print(f"FF Equal Portfolio: {compute_monthly_volatility(curr_portfolio['EQ'])}")
+        print()
+        print("MONTHLY SHARPE RATIO")
+        print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])}")
+        print()
+
         path = os.path.join(network_name) + ".dot"
         print("starting visualizing network")
         src = curr_network.visualize_network(path)
@@ -49,8 +62,10 @@ def index():
 
         return render_template("index.html", 
                             network_source=src, 
-                            top_decile_stocks=top_decile_stocks,
-                            bottom_decile_stocks=bottom_decile_stocks,
+                            network_img='static/img/' + exchange + '.png',
+                            network_capm='static/img/' + exchange + '_capm.png',
+                            top_decile_stocks='', # parse through later 
+                            bottom_decile_stocks='', # parse through later 
                             exchange_name=exchange,
                             tickers=tickers)
 

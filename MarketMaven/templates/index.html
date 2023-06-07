@@ -15,7 +15,9 @@
         <script>    
             //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
             //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-            d3.select("#etf-graph").graphviz().renderDot('digraph G {a -> b}');
+            //d3.select("#selection-network").graphviz().renderDot({{network_source|tojson}});
+            d3.select("#selection-network").append("img").attr('src', '{{network_img}}');
+            d3.select("#selection-graph").append("img").attr('src', '{{network_capm}}');
         </script>
 
         <script>
@@ -46,7 +48,7 @@
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
-                        <option value="S&P-500">S&P-500</option>
+                        <option value="AMEX">AMEX</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
                     </select>  
