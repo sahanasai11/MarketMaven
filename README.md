@@ -1,4 +1,4 @@
-# CS-145
+# MarketMaven
 Caltech CS 145
 
 Setup:
