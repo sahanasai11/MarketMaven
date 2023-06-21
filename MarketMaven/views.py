@@ -26,19 +26,11 @@ def index():
                             tickers=tickers)
     
     elif request.method == 'POST':
-
-        print(request.form)
-
-        #starting_amount = request.form['starting-amount']
-        #years_to_grow = request.form['years-to-grow']
-        #sectors = request.form.getlist('sectors')
-        #stocks = request.form.getlist('stocks')
+        sectors = request.form.getlist('sectors')
         exchange = request.form['exchange']
         network_name = exchange + "_network_graph"
         print("starting creating network")
-        print(exchange)
 
-        
         curr_network = networks.Network(network_name, exchange)
         print("finished creating network")
         curr_portfolio = curr_network.get_portfolio(10)
@@ -56,16 +48,14 @@ def index():
         path = os.path.join(network_name) + ".dot"
         print("starting visualizing network")
         src = curr_network.visualize_network(path)
-        print("finished visualizing network")
-        #print(src)
-        
+        print("finished visualizing network")        
 
+        # helen needs to change network_img
+        # sahana needs to change newtork_capm
         return render_template("index.html", 
                             network_source=src, 
                             network_img='static/img/' + exchange + '.png',
                             network_capm='static/img/' + exchange + '_capm.png',
-                            top_decile_stocks='', # parse through later 
-                            bottom_decile_stocks='', # parse through later 
                             exchange_name=exchange,
                             tickers=tickers)
 

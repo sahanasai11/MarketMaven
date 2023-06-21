@@ -1,7 +1,5 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 import graphviz
-import math 
 from . import db
 from MarketMaven.schemas import * 
 import pandas as pd
@@ -11,16 +9,21 @@ class Network():
 
     '''
     name: Name of network
-    stock_dict: Dictionary representation of stock network where key is stock ticker symbol,
-                value is list dictionaries where each dictionary signifies data for a day
-                for a stock
+    exchange: Name of exchange that is selected. Is an empty string if all are selected. 
     '''
     def __init__(self, name, exchange) -> None:
         self.name = name 
         self.exchange = exchange
         self.adj_matrix_path = "data/adj_matrix_" + exchange + ".csv"
         self.coeff_path = "data/coeffs_" + exchange + ".csv"
-        self.network= self.create_correlation_network()
+        self.network= self.set_correlation_network()
+    
+
+    def set_correlation_network(self):
+        A1 = pd.read_csv(self.adj_matrix_path, index_col='index')
+        A2 = pd.DataFrame(A1.values, index=A1.columns, columns=A1.columns)
+        g = nx.from_pandas_adjacency(A2)    
+        return g
     
 
     def get_network(self):
@@ -50,7 +53,6 @@ class Network():
 
     
     def visualize_network(self, path):
-        print(path)
         nx.drawing.nx_agraph.write_dot(self.network, path)
         graphviz_source = graphviz.Source.from_file(path)
         graphviz_g = graphviz.Graph()
@@ -63,12 +65,7 @@ class Network():
 
         return graphviz_g.source
 
-    def create_correlation_network(self):
-        A1 = pd.read_csv(self.adj_matrix_path, index_col='index')
-        A2 = pd.DataFrame(A1.values, index=A1.columns, columns=A1.columns)
-        g = nx.from_pandas_adjacency(A2)    
-        return g
-    
+
 
     def solve_optimization_problem(self):
         return 1/3  
