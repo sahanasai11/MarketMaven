@@ -22,7 +22,6 @@
         <script>
             $(document).ready(function() {
                 $('#selectpicker-sectors').selectpicker();
-                $('#selectpicker-stocks').selectpicker();
                 $('#selectpicker-exchanges').selectpicker();
                 $('#selectpicker-strategy').selectpicker();
             });
@@ -47,6 +46,7 @@
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
+                        <option value="All">All Exchanges</option>
                         <option value="AMEX">AMEX</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
@@ -80,7 +80,6 @@
                     </select>  
                 </div>
 
-
                 <div>
                     <input type="submit" value="Submit" id="submit-preferences-btn">
                 </div>
@@ -100,6 +99,8 @@
     <div id="selection-card" class="card graph">
         <h1>Selected Strategy Returns</h1>
         <div id="selection-graph">
+            {{ top_decile_stocks}}
+            {{ bottom_decile_stocks }}
         </div>
     </div>
 

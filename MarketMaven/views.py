@@ -7,7 +7,6 @@ from MarketMaven.financial_models import *
 
 import os
 
-
 # For flask shell
 @app.shell_context_processor
 def make_shell_context():
@@ -16,14 +15,10 @@ def make_shell_context():
 @app.route("/", methods=['GET', 'POST'])
 def index():
 
-    tickers = db.session.query(schemas.Ticker.ticker_symbol).distinct().all()
-
     if request.method == 'GET':
         return render_template("index.html", 
                             network_source=None, 
-                            best_stocks=None,
-                            exchange_name="Exchange",
-                            tickers=tickers)
+                            exchange_name="Exchange")
     
     elif request.method == 'POST':
         sectors = request.form.getlist('sectors')
@@ -56,6 +51,5 @@ def index():
                             network_source=src, 
                             network_img='static/img/' + exchange + '.png',
                             network_capm='static/img/' + exchange + '_capm.png',
-                            exchange_name=exchange,
-                            tickers=tickers)
+                            exchange_name=exchange)
 
