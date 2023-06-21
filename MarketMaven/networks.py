@@ -1,6 +1,5 @@
 import networkx as nx
 import graphviz
-from MarketMaven.schemas import * 
 import pandas as pd
 
 # need to import global data_list

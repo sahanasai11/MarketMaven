@@ -1,16 +1,9 @@
 from flask import Flask, render_template, request
 from . import app
 from . import networks
-from . import db
-from MarketMaven import schemas
 from MarketMaven.financial_models import *
 
 import os
-
-# For flask shell
-@app.shell_context_processor
-def make_shell_context():
-    return {'db': db, 'Ticker': schemas.Ticker}
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
