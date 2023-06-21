@@ -1,22 +1,14 @@
-html, body, main {
-    height: 100%;
-}
-
 body {
     display: flex;
     flex-direction: column;
     background-color: #e9f7e8;
 }
 
-.container {
-    margin-left: 100px;
-}
-
 main {
     display: flex;
     justify-content: center;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 .navbar {
@@ -36,10 +28,10 @@ main {
 
 .navbar-default .navbar-brand {
     font-size: 35pt;
-    line-height: 60px;
+    line-height: 65px;
     color: white;
     padding: 5px;
-    margin-left: 100px;
+    margin-left: 5%;
 }
 
 #preferences-card {
