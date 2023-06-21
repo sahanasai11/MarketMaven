@@ -48,6 +48,7 @@
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
+                        <option value="All">All Exchanges</option>
                         <option value="AMEX">AMEX</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
@@ -71,7 +72,7 @@
                     </select>  
                 </div>
 
-                <div id="stocks-div">
+                <!-- <div id="stocks-div">
                     <label for="stocks">Stocks:</label><br>
                     <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple>
                         {% for ticker in tickers %}
@@ -79,7 +80,7 @@
                             <option value="{{ ticker }}">{{ ticker }}</option>
                         {% endfor %}
                     </select>  
-                </div>
+                </div> -->
 
                 <div id="strategy-div">
                     <label for="strategy">Strategy:</label><br>
