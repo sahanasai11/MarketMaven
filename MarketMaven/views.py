@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from . import app
 from . import networks
 from MarketMaven.financial_models import *
 
 import os
+
+DOTFILE_PATH = 'dot'
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -14,8 +16,10 @@ def index():
                             exchange_name="Exchange")
     
     elif request.method == 'POST':
+        
         sectors = request.form.getlist('sectors')
         exchange = request.form['exchange']
+        print('EXCHANGE: ' + exchange)
         network_name = exchange + "_network_graph"
         print("starting creating network")
 
@@ -33,16 +37,24 @@ def index():
         print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])}")
         print()
 
-        path = os.path.join(network_name) + ".dot"
+        path = os.path.join(DOTFILE_PATH, network_name) + ".dot"
         print("starting visualizing network")
         src = curr_network.visualize_network(path)
-        print("finished visualizing network")        
+        print("finished visualizing network")  
+
+        json_resp = {'network_source': src,
+                     'network_img' : 'static/img/' + exchange + '.png',
+                     'network_capm' :'static/img/' + exchange + '_capm.png',
+                     'exchange_name' : exchange
+                    }      
+        
+        return jsonify(json_resp)
 
         # helen needs to change network_img
         # sahana needs to change newtork_capm
-        return render_template("index.html", 
-                            network_source=src, 
-                            network_img='static/img/' + exchange + '.png',
-                            network_capm='static/img/' + exchange + '_capm.png',
-                            exchange_name=exchange)
+        # return render_template("index.html", 
+        #                     network_source=src, 
+        #                     network_img='static/img/' + exchange + '.png',
+        #                     network_capm='static/img/' + exchange + '_capm.png',
+        #                     exchange_name=exchange)
 
