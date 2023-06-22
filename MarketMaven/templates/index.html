@@ -15,8 +15,8 @@
         <script>    
             //d3.select("#returns-graph").graphviz().renderDot({{network_source|tojson}});
             //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#selection-network").graphviz().renderDot({{network_source|tojson}});
-            d3.select("#selection-network").append("img").attr('src', '{{network_img}}');
+            //d3.select("#network").graphviz().renderDot({{network_source|tojson}});
+            d3.select("#network").append("img").attr('src', '{{network_img}}');
             d3.select("#returns-graph").append("img").attr('src', '{{network_capm}}');
         </script>
 
@@ -24,6 +24,7 @@
             $(document).ready(function() {
                 $('#selectpicker-sectors').selectpicker();
                 $('#selectpicker-exchanges').selectpicker();
+                $('#selectpicker-stocks').selectpicker();
                 $('#selectpicker-strategy').selectpicker();
             });
         </script>
@@ -47,7 +48,6 @@
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
-                        <option value="All">All Exchanges</option>
                         <option value="AMEX">AMEX</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
@@ -71,6 +71,12 @@
                     </select>  
                 </div>
 
+                <div id="stocks-div">
+                    <label for="stocks">Stocks:</label><br>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple disabled title="Coming soon!">
+                    </select>  
+                </div>
+
                 <div id="strategy-div">
                     <label for="strategy">Strategy:</label><br>
                     <select class="dropdown" id="selectpicker-strategy" name="strategy" data-live-search="true">
@@ -90,7 +96,7 @@
 
     <div id="network-card" class="card graph">
         <h1>Portfolio Network</h1>
-        <div id="selection-network">
+        <div id="network">
 
         </div>
     </div>
@@ -98,8 +104,7 @@
     <div id="returns-card" class="card graph">
         <h1>Selected Strategy Returns</h1>
         <div id="returns-graph">
-            {{ top_decile_stocks}}
-            {{ bottom_decile_stocks }}
+
         </div>
     </div>
 

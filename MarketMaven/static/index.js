@@ -1,7 +1,7 @@
 "use strict";
 
 const ROOTPATH = "http://localhost:5000";
-const DEBUG = true;
+const DEBUG = false;
 
 /**
  * Initialize the preferences form button
@@ -30,28 +30,59 @@ function submitPreferences() {
             resp = checkStatus(resp);
             const data = await resp.json();
             populateIndex(data);
-            id("submit-result").textContent = "Successfully submitted!";
         } catch (err) {
             handleError(err);
         } 
     }); 
 }
 
+/**
+ * Helper function to populate home page after user presses submit
+ * @param {JSON object} data: JSON response after user submission for network 
+ * and CAPM info
+ */
 function populateIndex(data) {
-    console.log(data);
+    let network = id("network");
+    let capm = id("returns-graph");
 
-    let networkCard = id("network-card");
-    let capmCard = id("returns-card");
-
+    // clear network and capm cards if graph and network currently exists
+    network.innerHTML = '';
+    capm.innerHTML = '';
+    
     let networkImg = gen("img");
     networkImg.src = data["network_img"];
     networkImg.style.width = "90%";
-    networkCard.appendChild(networkImg);
+    network.appendChild(networkImg);
 
     let networkCapmImg = gen("img");
     networkCapmImg.src = data["network_capm"];
     networkCapmImg.style.width = "90%";
-    capmCard.appendChild(networkCapmImg);
+    capm.appendChild(networkCapmImg);
+
+    showPortfolioValues(data, capm);
+
+}
+
+/**
+ * Helper function to populate home page after user presses submit
+ * @param {JSON object} data: JSON response after user submission for network 
+ *  and CAPM info
+ * @param {HTMLDivElement} capm: HTML div element representing contents for returns
+ *  graph
+ */
+function showPortfolioValues(data, capm) {
+
+    let ffEqualPortfolio = gen("h2");
+    ffEqualPortfolio.textContent = "Fama & French Equal Portfolio";
+    capm.appendChild(ffEqualPortfolio);
+
+    ffEqualPortfolio = data['FF Equal Portfolio'];
+    console.log(ffEqualPortfolio);
+    for (let info in ffEqualPortfolio) {
+        let infoElem = gen("p");
+        infoElem.textContent = info + ": " + ffEqualPortfolio[info];
+        capm.appendChild(infoElem);
+    }
 }
 
 /**

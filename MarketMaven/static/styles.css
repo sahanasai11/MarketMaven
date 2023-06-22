@@ -90,9 +90,19 @@ main {
     overflow: hidden;
 }
 
+.graph > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 h1 {
     margin-bottom: 10px;
     font-size: 20pt;
+}
+
+h2 {
+    font-size: 16pt;
 }
 
 svg {
@@ -103,10 +113,5 @@ svg {
 
 select {
     display: None;
-}
-
-#selection-network img, #returns-graph img {
-    width: 90%;
-    height: auto;
 }
 

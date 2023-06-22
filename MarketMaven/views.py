@@ -45,16 +45,15 @@ def index():
         json_resp = {'network_source': src,
                      'network_img' : 'static/img/' + exchange + '.png',
                      'network_capm' :'static/img/' + exchange + '_capm.png',
-                     'exchange_name' : exchange
+                     'exchange_name' : exchange,
+                     'FF Equal Portfolio' : {
+                         'Mean Monthly Returns' : compute_monthly_average(curr_portfolio['EQ']),
+                         'Monthly Volatility' : compute_monthly_volatility(curr_portfolio['EQ']),
+                         'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])
+                     }
                     }      
         
         return jsonify(json_resp)
 
-        # helen needs to change network_img
-        # sahana needs to change newtork_capm
-        # return render_template("index.html", 
-        #                     network_source=src, 
-        #                     network_img='static/img/' + exchange + '.png',
-        #                     network_capm='static/img/' + exchange + '_capm.png',
-        #                     exchange_name=exchange)
+
 
