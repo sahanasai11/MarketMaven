@@ -14,8 +14,10 @@ class Network():
     def __init__(self, name, exchange) -> None:
         self.name = name 
         self.exchange = exchange
-        self.adj_matrix_path = "data/adj_matrix_" + exchange + ".csv"
-        self.coeff_path = "data/coeffs_" + exchange + ".csv"
+        self.data_path = 'data/industry_equal_data.csv'
+        self.coeff_path = 'data/industry_equal.csv'
+        self.ffm_path = 'data/ffm_industry.csv'
+        ## here is where we would account for selected sectors
         self.network= self.create_correlation_network()
     
 
@@ -59,107 +61,134 @@ class Network():
 
         return graphviz_g.source
 
-    def create_correlation_network(self):
-        A1 = pd.read_csv(self.adj_matrix_path, index_col='index')
-        A2 = pd.DataFrame(A1.values, index=A1.columns, columns=A1.columns)
-        g = nx.from_pandas_adjacency(A2)    
-        return g
+
+    def add_correlation_edges(self, graph, sectors, theta, data):
+        # data here is previous 12 months 
+        for i in sectors:
+            for j in sectors:
+                curr_corr = data[i].corr(data[j])
+                if i != j and abs(curr_corr) > theta:
+                    graph.add_edge(i, j)
+        return graph
     
 
+    def create_graph(self, data, sectors): 
+        g = nx.Graph()
+        g.add_nodes_from(sectors)
+        g = self.add_correlation_edges(g , list(g.nodes), .55, data)
+        return g
+
+
+    def create_correlation_network(self):
+        ## this is for all years  
+        data = pd.read_csv(self.data_path)
+        data = data.drop('index', axis=1)
+        columns = (list(data.columns))[1:]
+        g = self.create_graph(data, columns)
+        return g
+    
+    ## This is already called 
     def solve_optimization_problem(self):
         return 1/3  
 
-
-    def find_average_centralities(self):
+    ## This is already called 
+    def find_average_centralities(self, graph):
         average_centrailites = dict()
         scale_factor = self.solve_optimization_problem()
-        graph = self.network
         
         degree_centrality = nx.degree_centrality(graph)
         closeness_centrality = nx.closeness_centrality(graph)
         betweenness_centrality = nx.betweenness_centrality(graph)
         for node in graph.nodes():
-            average_centrailites[node] = scale_factor * (degree_centrality[node] + closeness_centrality[node] + betweenness_centrality[node])        
+            average_centrailites[node] = scale_factor * (degree_centrality[node]) + scale_factor *(closeness_centrality[node]) + scale_factor *(betweenness_centrality[node])       
         return average_centrailites
     
 
-    def calc_weights(self, group):
-        total_size = group['size'].sum()
-        num_stocks = group['size'].count()
-        group['eq_weight'] = 1/float(num_stocks)
-        group['val_weight'] = group['size']/total_size
+    ## This is already called 
+    def find_monthly_graph(self, equal, data, start_date, end_date, max_date):
+        ## for each date, find previous 11 months and find the graph (using data_equal) 
+        columns = (list(data.columns))[1:]
+        while end_date <= max_date:
+            # find graph for that data 
+            curr_data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
+            curr_graph = self.create_graph(curr_data, columns)
+            
+            # find coefficents and add into the table
+            average_centralities = self.find_average_centralities(curr_graph)
+            
+            for key in average_centralities.keys():
+                equal.loc[(equal['Date'] == end_date) & (equal['Industry'] == key), 'Coeff'] = average_centralities[key]            
+            
+            # update date 
+            start_date = start_date + pd.DateOffset(months=1) + pd.offsets.MonthEnd(0)
+            end_date = end_date + pd.DateOffset(months=1) + pd.offsets.MonthEnd(0)
+
+
+
+    def find_deciles(self, group):
+        group['Decile'] = pd.qcut(group['SZE'].rank(method='first'), 10, labels=False)
         return group
     
-
-    def get_month(self, row):
-        return row[5:7]
-
-    def get_year(self, row):
-        return row[0:4]
-
-
-    def get_portfolio(self, num_divisions):
-        data = pd.read_csv('data/monthly_stock.csv')
-        exch = pd.read_csv(self.coeff_path, index_col='index')
-        exch_data = data.merge(exch, how='inner', on='permno')
-
-        #at last date, find the long short portfolio 
-        last_date = exch_data[exch_data['date'] == '2020-12-31']
-        last_date['decile'] = pd.qcut(last_date['coeff'].rank(method='first'), num_divisions, labels=False)
-
-        # long short stocks 
-        long_stocks = list(last_date[last_date['decile'] == 9]['permno'].values)
-        short_stocks = list(last_date[last_date['decile'] == 0]['permno'].values)
-
-        exch_data['size'] = exch_data['shares_outstanding'] * exch_data['price']
-
-        ## create two differenet data frames, one for short and one for long 
-        exch_short = exch_data[exch_data['permno'].isin(short_stocks)]
-        exch_short = exch_short.reset_index()
-        exch_short = exch_short.drop('index', axis=1)
-
-        exch_long = exch_data[exch_data['permno'].isin(long_stocks)]
-        exch_long = exch_long.reset_index()
-        exch_long = exch_long.drop('index', axis=1)
+    def find_weights(self, group):
+        total_size = group['SZE'].sum()
+        num_stocks = group['SZE'].count()
+        group['EQ_weight'] = 1/float(num_stocks)
+        group['VAL_weight'] = group['SZE']/total_size
+        return group
 
 
-        ## find all weights and returns for both long, short portfolios
-        exch_long = exch_long.groupby('date', group_keys=True).apply(self.calc_weights)
-        exch_short = exch_short.groupby('date', group_keys=True).apply(self.calc_weights)
+    def get_portfolio(self):
+        # this is the already dataframe where all monthly graphs have already been created as of now 
+        data = pd.read_csv(self.coeff_path)
+        ffm_data = pd.read_csv(self.ffm_path)
 
-        exch_long['EQ'] = exch_long['eq_weight'] * exch_long['returns']
-        exch_long['VAL'] = exch_long['val_weight'] * exch_long['returns']
-        exch_short['EQ'] = exch_short['eq_weight'] * exch_short['returns']
-        exch_short['VAL'] = exch_short['val_weight'] * exch_short['returns']
+        ## sort data into deciles 
+        data = data.groupby('Date').apply(self.find_deciles)
+        data_short = data[data['Decile'] == 9]
+        data_long = data[data['Decile'] == 0]
 
+        ## find long and short returns 
+        data_short = data_short.groupby('Date').apply(self.find_weights)
+        data_short['EQ'] = data_short['Return'] * data_short['EQ_weight']
+        data_short['VAL'] = data_short['Return'] * data_short['VAL_weight']
+        data_short = data_short.reset_index()
+        data_short = data_short.drop('index', axis=1)
 
-        ## Create a new returns table 
-        returns_table = pd.DataFrame()
-        returns_table['EQ_long'] = exch_long['EQ'].groupby('date').sum() * 100
-        returns_table['EQ_short'] = exch_short['EQ'].groupby('date').sum() * 100
-        returns_table['EQ'] = returns_table['EQ_long'] - returns_table['EQ_short'] 
-
-        returns_table['VAL_long'] = exch_long['VAL'].groupby('date').sum() * 100
-        returns_table['VAL_short'] = exch_short['VAL'].groupby('date').sum() * 100 
-        returns_table['VAL'] = returns_table['VAL_long'] - returns_table['VAL_short'] 
-
-        returns_table = returns_table.reset_index()
-
-
-        returns_table['month'] = returns_table['date'].apply(self.get_month)
-        returns_table['year'] = returns_table['date'].apply(self.get_year)
-
-        ffm = pd.read_csv('data/monthly_stock_ffm.csv')
-        ffm['month'] = ffm['date'].apply(self.get_month)
-        ffm['year'] = ffm['date'].apply(self.get_year)
+        data_long = data_long.groupby('Date').apply(self.find_weights)
+        data_long['EQ'] = data_long['Return'] * data_long['EQ_weight']
+        data_long['VAL'] = data_long['Return'] * data_long['VAL_weight']
+        data_long = data_long.reset_index()
+        data_long = data_long.drop('index', axis=1)
 
 
-        merged_data = returns_table.merge(ffm, how='inner', on=['month', 'year'])
-        merged_data = merged_data.drop(['date_x', 'year', 'month'], axis=1)
-        merged_data = merged_data.rename(columns={'date_y': 'Date'})
-        merged_data['EQ_RF'] = merged_data['EQ'] - merged_data['risk_free']
+        ## for each date, find the overall short and long portfolio which is just a sum 
+        new_data = pd.DataFrame(columns=['Date', 'EQ', 'VAL'])
+        new_data['Date'] = data_long['Date'].unique()
+
+
+        ## find sum of industry returns depending on portfolio 
+        eq_grouped_long = data_long.groupby('Date')['EQ'].sum().reset_index()
+        eq_grouped_short = data_short.groupby('Date')['EQ'].sum().reset_index()
+        new_data['EQ'] = eq_grouped_long['EQ'] - eq_grouped_short['EQ']
+        val_grouped_long = data_long.groupby('Date')['VAL'].sum().reset_index()
+        val_grouped_short = data_short.groupby('Date')['VAL'].sum().reset_index()
+        new_data['VAL'] = val_grouped_long['VAL'] - val_grouped_short['VAL']
+
+        ## Clean and merge data 
+        ffm_data = ffm_data.rename(columns={'Mkt-RF': 'Mkt_RF'})
+        ffm_data['Mkt'] = ffm_data.Mkt_RF + ffm_data.RF
+
+        merged_data = pd.merge(new_data, ffm_data, how='inner', on=['Date'])
+        merged_data['EQ_RF'] = merged_data['EQ'] - merged_data['RF']
+        merged_data['VAL_RF'] = merged_data['VAL'] - merged_data['RF']
 
         return merged_data
+
+
+
+
+
+
 
 
 

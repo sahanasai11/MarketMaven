@@ -22,21 +22,20 @@ def index():
         print('EXCHANGE: ' + exchange)
         network_name = exchange + "_network_graph"
 
-        print(network_name)
         print("starting creating network")
 
         curr_network = networks.Network(network_name, exchange)
         print("finished creating network")
-        curr_portfolio = curr_network.get_portfolio(10)
 
+        curr_portfolio = curr_network.get_portfolio()
         print("MEAN MONTHLY RETURNS")
-        print(f"FF Equal Portfolio: {compute_monthly_average(curr_portfolio['EQ'])}")
+        print(f"FF Equal Portfolio: {compute_monthly_average(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ'])}")
         print()
         print("MONTHLY VOLATILITY")
-        print(f"FF Equal Portfolio: {compute_monthly_volatility(curr_portfolio['EQ'])}")
+        print(f"FF Equal Portfolio: {compute_monthly_volatility(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ'])}")
         print()
         print("MONTHLY SHARPE RATIO")
-        print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])}")
+        print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ'], curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['RF'])}")
         print()
 
         path = os.path.join(DOTFILE_PATH, network_name) + ".dot"
@@ -44,17 +43,16 @@ def index():
         src = curr_network.visualize_network(path)
         print("finished visualizing network")  
 
-        # helen needs to change network_img
-        # sahana needs to change newtork_capm
+        
         json_resp = {
             'network_source': src,
             'network_img' : 'static/img/' + exchange + '.png',
             'network_capm' :'static/img/' + exchange + '_capm.png',
             'exchange_name' : exchange,
             'FF Equal Portfolio' : {
-                'Mean Monthly Returns' : compute_monthly_average(curr_portfolio['EQ']),
-                'Monthly Volatility' : compute_monthly_volatility(curr_portfolio['EQ']),
-                'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])
+                'Mean Monthly Returns' : compute_monthly_average(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ']),
+                'Monthly Volatility' : compute_monthly_volatility(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ']),
+                'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['EQ'], curr_portfolio[curr_portfolio['Date'] > '1999-12-31']['RF'])
                 }
             }        
         
