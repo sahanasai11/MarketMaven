@@ -44,7 +44,8 @@ def index():
         # sahana needs to change newtork_capm
         return render_template("index.html", 
                             network_source=src, 
-                            network_img='static/img/' + exchange + '.png',
+                            newtork_src='dot/' + network_name + '.dot',
+                            #network_img='static/img/' + exchange + '.png',
                             network_capm='static/img/' + exchange + '_capm.png',
                             exchange_name=exchange)
 
