@@ -13,9 +13,6 @@
         <script src="{{url_for('.static', filename='utils.js')}}"></script>
         <script defer src="{{url_for('.static', filename='index.js')}}"></script>
         <script>    
-            //d3.select("#returns-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#network").graphviz().renderDot({{network_source|tojson}});
             d3.select("#network").append("img").attr('src', '{{network_img}}');
             d3.select("#returns-graph").append("img").attr('src', '{{network_capm}}');
         </script>

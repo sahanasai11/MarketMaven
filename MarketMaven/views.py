@@ -21,6 +21,8 @@ def index():
         exchange = request.form['exchange']
         print('EXCHANGE: ' + exchange)
         network_name = exchange + "_network_graph"
+
+        print(network_name)
         print("starting creating network")
 
         curr_network = networks.Network(network_name, exchange)
@@ -42,18 +44,18 @@ def index():
         src = curr_network.visualize_network(path)
         print("finished visualizing network")  
 
-        json_resp = {'network_source': src,
-                     'network_img' : 'static/img/' + exchange + '.png',
-                     'network_capm' :'static/img/' + exchange + '_capm.png',
-                     'exchange_name' : exchange,
-                     'FF Equal Portfolio' : {
-                         'Mean Monthly Returns' : compute_monthly_average(curr_portfolio['EQ']),
-                         'Monthly Volatility' : compute_monthly_volatility(curr_portfolio['EQ']),
-                         'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])
-                     }
-                    }      
+        # helen needs to change network_img
+        # sahana needs to change newtork_capm
+        json_resp = {
+            'network_source': src,
+            'network_img' : 'static/img/' + exchange + '.png',
+            'network_capm' :'static/img/' + exchange + '_capm.png',
+            'exchange_name' : exchange,
+            'FF Equal Portfolio' : {
+                'Mean Monthly Returns' : compute_monthly_average(curr_portfolio['EQ']),
+                'Monthly Volatility' : compute_monthly_volatility(curr_portfolio['EQ']),
+                'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])
+                }
+            }        
         
         return jsonify(json_resp)
-
-
-

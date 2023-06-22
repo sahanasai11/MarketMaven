@@ -49,18 +49,20 @@ function populateIndex(data) {
     network.innerHTML = '';
     capm.innerHTML = '';
     
-    let networkImg = gen("img");
-    networkImg.src = data["network_img"];
-    networkImg.style.width = "90%";
-    network.appendChild(networkImg);
+    if (data["exchange_name"] === "AMEX"){
+        d3.select("#network").graphviz().renderDot(data["network_source"])
+    } else {
+        let networkImg = gen("img");
+        networkImg.src = data["network_img"];
+        networkImg.style.width = "90%";
+        network.appendChild(networkImg);
+    }
 
     let networkCapmImg = gen("img");
     networkCapmImg.src = data["network_capm"];
     networkCapmImg.style.width = "90%";
     capm.appendChild(networkCapmImg);
-
     showPortfolioValues(data, capm);
-
 }
 
 /**
