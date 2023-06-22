@@ -35,7 +35,7 @@ def index():
         print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])}")
         print()
 
-        path = os.path.join(network_name) + ".dot"
+        path = 'dot/' + os.path.join(network_name) + ".dot"
         print("starting visualizing network")
         src = curr_network.visualize_network(path)
         print("finished visualizing network")        
