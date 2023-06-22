@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from . import app
 from . import networks
 from MarketMaven.financial_models import *
 
 import os
+
+DOTFILE_PATH = 'dot'
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -14,9 +16,13 @@ def index():
                             exchange_name="Exchange")
     
     elif request.method == 'POST':
+        
         sectors = request.form.getlist('sectors')
         exchange = request.form['exchange']
+        print('EXCHANGE: ' + exchange)
         network_name = exchange + "_network_graph"
+
+        print(network_name)
         print("starting creating network")
 
         curr_network = networks.Network(network_name, exchange)
@@ -33,16 +39,23 @@ def index():
         print(f"FF Equal Portfolio: {compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])}")
         print()
 
-        path = os.path.join(network_name) + ".dot"
+        path = os.path.join(DOTFILE_PATH, network_name) + ".dot"
         print("starting visualizing network")
         src = curr_network.visualize_network(path)
-        print("finished visualizing network")        
+        print("finished visualizing network")  
 
         # helen needs to change network_img
         # sahana needs to change newtork_capm
-        return render_template("index.html", 
-                            network_source=src, 
-                            network_img='static/img/' + exchange + '.png',
-                            network_capm='static/img/' + exchange + '_capm.png',
-                            exchange_name=exchange)
-
+        json_resp = {
+            'network_source': src,
+            'network_img' : 'static/img/' + exchange + '.png',
+            'network_capm' :'static/img/' + exchange + '_capm.png',
+            'exchange_name' : exchange,
+            'FF Equal Portfolio' : {
+                'Mean Monthly Returns' : compute_monthly_average(curr_portfolio['EQ']),
+                'Monthly Volatility' : compute_monthly_volatility(curr_portfolio['EQ']),
+                'Sharpe Ratio' : compute_monthly_sharpe_ratio(curr_portfolio['EQ'], curr_portfolio['risk_free'])
+                }
+            }        
+        
+        return jsonify(json_resp)

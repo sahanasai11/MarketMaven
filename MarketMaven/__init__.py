@@ -1,4 +1,4 @@
-import flask, csv
+import flask
 from flask_bootstrap import Bootstrap
 
 app = flask.Flask(__name__)

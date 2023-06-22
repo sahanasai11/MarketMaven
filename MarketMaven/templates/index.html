@@ -11,18 +11,17 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script src="{{url_for('.static', filename='utils.js')}}"></script>
+        <script defer src="{{url_for('.static', filename='index.js')}}"></script>
         <script>    
-            //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#selection-network").graphviz().renderDot({{network_source|tojson}});
-            d3.select("#selection-network").append("img").attr('src', '{{network_img}}');
-            d3.select("#selection-graph").append("img").attr('src', '{{network_capm}}');
+            d3.select("#network").append("img").attr('src', '{{network_img}}');
+            d3.select("#returns-graph").append("img").attr('src', '{{network_capm}}');
         </script>
 
         <script>
             $(document).ready(function() {
                 $('#selectpicker-sectors').selectpicker();
                 $('#selectpicker-exchanges').selectpicker();
+                $('#selectpicker-stocks').selectpicker();
                 $('#selectpicker-strategy').selectpicker();
             });
         </script>
@@ -40,13 +39,12 @@
 {% block app_content %}
     <div id="preferences-card" class="card">
         <h1>Preferences</h1>
-        <form id="preferences-form" method="POST" action="/" enctype="multipart/form-data">
+        <form id="preferences-form" enctype="multipart/form-data">
             <div class="form-elements">
                 
                 <div id="exchanges-div">
                     <label for="exchange">Exchange:</label><br>
                     <select class="dropdown" id="selectpicker-exchanges" name="exchange" data-live-search="true">
-                        <option value="All">All Exchanges</option>
                         <option value="AMEX">AMEX</option>
                         <option value="NYSE">NYSE</option>
                         <option value="NASDAQ">NASDAQ</option>
@@ -55,7 +53,7 @@
 
                 <div id="sectors-div">
                     <label for="stocks">Sectors:</label><br>
-                    <select class="dropdown" id="selectpicker-sectors" name="sectors" multiple data-live-search="true">
+                    <select class="dropdown" id="selectpicker-sectors" name="sectors" multiple data-live-search="true" data-actions-box="true">
                         <option value="energy">Energy</option>
                         <option value="materials">Materials</option>
                         <option value="industrials">Industrials</option>
@@ -70,6 +68,12 @@
                     </select>  
                 </div>
 
+                <div id="stocks-div">
+                    <label for="stocks">Stocks:</label><br>
+                    <select class="dropdown" id="selectpicker-stocks" name="stocks" multiple disabled title="Coming soon!">
+                    </select>  
+                </div>
+
                 <div id="strategy-div">
                     <label for="strategy">Strategy:</label><br>
                     <select class="dropdown" id="selectpicker-strategy" name="strategy" data-live-search="true">
@@ -79,28 +83,25 @@
                         <option value="betweenness-centrality">Betweenness Centrality</option>
                     </select>  
                 </div>
-
-                <div>
-                    <input type="submit" value="Submit" id="submit-preferences-btn">
-                </div>
-
             </div>
         </form>
+
+        <input type="submit" value="Submit" id="submit-preferences-btn">
+        <p id="submit-result"></p>
         
     </div>
 
     <div id="network-card" class="card graph">
-        <h1>Selected Portfolio Network</h1>
-        <div id="selection-network">
+        <h1>Portfolio Network</h1>
+        <div id="network">
 
         </div>
     </div>
 
-    <div id="selection-card" class="card graph">
+    <div id="returns-card" class="card graph">
         <h1>Selected Strategy Returns</h1>
-        <div id="selection-graph">
-            {{ top_decile_stocks}}
-            {{ bottom_decile_stocks }}
+        <div id="returns-graph">
+
         </div>
     </div>
 

@@ -66,12 +66,17 @@ main {
     margin-bottom: 10px;
 }
 
-.selectpicker, button .dropdown-toggle .bs-placeholder .btn-default {
+.selectpicker, button .dropdown-toggle .bs-placeholder .btn-default, #submit-result {
     width: 220px;
 }
 
 #submit-preferences-btn {
     margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#submit-result {
+    text-align: center;
 }
 
 .graph {
@@ -85,9 +90,19 @@ main {
     overflow: hidden;
 }
 
+.graph > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 h1 {
     margin-bottom: 10px;
     font-size: 20pt;
+}
+
+h2 {
+    font-size: 16pt;
 }
 
 svg {
@@ -98,10 +113,5 @@ svg {
 
 select {
     display: None;
-}
-
-#selection-network img, #selection-graph img {
-    width: 90%;
-    height: auto;
 }
 
