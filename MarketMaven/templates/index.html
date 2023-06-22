@@ -11,14 +11,9 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script src="{{url_for('.static', filename='utils.js')}}"></script>
-        <script>    
-            //d3.select("#selection-graph").graphviz().renderDot({{network_source|tojson}});
-            //d3.select("#etf-graph").graphviz().renderDot({{network_source|tojson}});
-            console.log("getting network image");
+        <script>
+        // solution is to pass use the actual dot file instead of just the path     
             d3.select("#selection-network").graphviz().renderDot({{network_source|tojson}});
-            
-            //d3.select("#selection-network").append("img").attr('src', '{{network_img}}');
-            console.log("loaded network image");
             d3.select("#selection-graph").append("img").attr('src', '{{network_capm}}');
         </script>
 
