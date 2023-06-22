@@ -20,7 +20,7 @@ def index():
         sectors = request.form.getlist('sectors')
         exchange = request.form['exchange']
         print('EXCHANGE: ' + exchange)
-        network_name = exchange + "_network_graph"
+        network_name = "industries network graph"
 
         print("starting creating network")
 
