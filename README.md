@@ -1,6 +1,8 @@
 # Market Maven
 Investing can be overwhelming, especially when you’re new to the stock market. This interactive tool aims to simplify the investment process by generating personalized portfolios through network-based strategies.
 
+![GIF of a demo of MarketMaven](marketmaven_gif.gif)
+
 Setup:
 - Create virtual environment (only need to do this step once): `python3 -m venv venv`
 - Activate virtual environment: `source venv/bin/activate`
