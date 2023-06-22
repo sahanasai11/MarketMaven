@@ -17,6 +17,8 @@ def index():
         sectors = request.form.getlist('sectors')
         exchange = request.form['exchange']
         network_name = exchange + "_network_graph"
+
+        print(network_name)
         print("starting creating network")
 
         curr_network = networks.Network(network_name, exchange)
